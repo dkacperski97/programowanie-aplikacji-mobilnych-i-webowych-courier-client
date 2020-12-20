@@ -1,26 +1,32 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { ParcelsPage, LabelsPage, HomePage } from './pages';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { LinksProvider, TokenProvider } from './context';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App: React.FC = () => {
+	return (
+		<CssBaseline>
+			<TokenProvider>
+				<LinksProvider>
+					<Router>
+						<Switch>
+							<Route path="/parcels">
+								<ParcelsPage />
+							</Route>
+							<Route path="/labels">
+								<LabelsPage />
+							</Route>
+							<Route path="/">
+								<HomePage />
+							</Route>
+						</Switch>
+					</Router>
+				</LinksProvider>
+			</TokenProvider>
+		</CssBaseline>
+	);
+};
 
 export default App;
