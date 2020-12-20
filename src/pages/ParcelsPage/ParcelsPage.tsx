@@ -47,7 +47,7 @@ const ParcelsPage: React.FC = () => {
 				try {
 					res = await fetch(url, { method: 'GET', headers });
 				} catch (e) {
-					setError(e);
+					setError(new Error("Wystąpił błąd w trakcie próby komunikacji z usługą sieciową. Spróbuj ponownie później."));
 					return;
 				}
 				const value = await res.json();

@@ -43,7 +43,7 @@ const LabelsPage: React.FC = () => {
 			try {
 				res = await fetch(url, { method: 'GET', headers });
 			} catch (e) {
-				setError(e);
+				setError(new Error("Wystąpił błąd w trakcie próby komunikacji z usługą sieciową. Spróbuj ponownie później."));
 				return;
 			}
 			const value = await res.json();
@@ -73,7 +73,7 @@ const LabelsPage: React.FC = () => {
 			const headers = tokenContext?.token ? { 'Authorization': `Bearer ${tokenContext.token}`} : undefined
 			res = await fetch(url, { method: 'POST', headers: { ...headers, 'Content-Type': 'application/json'  }, body: JSON.stringify({ labelId }) });
 		} catch (e) {
-			setError(e);
+			setError(new Error("Wystąpił błąd w trakcie próby komunikacji z usługą sieciową. Spróbuj ponownie później."));
 			return;
 		}
 		if (res.status !== 201) {
@@ -91,7 +91,7 @@ const LabelsPage: React.FC = () => {
 		try {
 			res2 = await fetch(url2, { method: 'GET', headers });
 		} catch (e) {
-			setError(e);
+			setError(new Error("Wystąpił błąd w trakcie próby komunikacji z usługą sieciową. Spróbuj ponownie później."));
 			return;
 		}
 		const value = await res2.json();

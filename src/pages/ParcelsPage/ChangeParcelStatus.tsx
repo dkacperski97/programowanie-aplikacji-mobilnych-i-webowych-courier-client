@@ -61,7 +61,7 @@ const ChangeParcelStatus: React.FC<ChangeParcelStatusProps> = ({
 					body: JSON.stringify({ status })
 				});
             } catch (e) {
-                setError(e);
+				setError(new Error("Wystąpił błąd w trakcie próby komunikacji z usługą sieciową. Spróbuj ponownie później."));
 				onClose();
                 return;
             }
