@@ -62,8 +62,14 @@ const LabelsPage: React.FC = () => {
 		return <Redirect to="/" />
 	}
 
+	const setLabelDisabled = (labelId: string, value: boolean|undefined) => {
+		setLabels(prev => prev?.map(label => label.id !== labelId ? label : { ...label, disabled: value }));
+	}
+
 	const onCreateParcelClick = async (parcelUrl: string, labelId: string ) => {
+		setLabelDisabled(labelId, true);
 		if (!process.env.REACT_APP_WEB_SERVICE_URL || !parcelUrl) {
+			setLabelDisabled(labelId, undefined);
 			setError(new Error("Nie można utworzyć paczki"));
 			return;
 		}
@@ -73,15 +79,18 @@ const LabelsPage: React.FC = () => {
 			const headers = tokenContext?.token ? { 'Authorization': `Bearer ${tokenContext.token}`} : undefined
 			res = await fetch(url, { method: 'POST', headers: { ...headers, 'Content-Type': 'application/json'  }, body: JSON.stringify({ labelId }) });
 		} catch (e) {
+			setLabelDisabled(labelId, undefined);
 			setError(new Error("Wystąpił błąd w trakcie próby komunikacji z usługą sieciową. Spróbuj ponownie później."));
 			return;
 		}
 		if (res.status !== 201) {
+			setLabelDisabled(labelId, undefined);
 			setError(new Error("Wystąpił błąd w trakcie tworzenia paczki"));
 			return;
 		}
 
 		if (!process.env.REACT_APP_WEB_SERVICE_URL || !linksContext?.links?.labels?.href) {
+			setLabelDisabled(labelId, undefined);
 			setError(new Error("Nie można pobrać listy etykiet"));
 			return;
 		}
@@ -91,11 +100,13 @@ const LabelsPage: React.FC = () => {
 		try {
 			res2 = await fetch(url2, { method: 'GET', headers });
 		} catch (e) {
+			setLabelDisabled(labelId, undefined);
 			setError(new Error("Wystąpił błąd w trakcie próby komunikacji z usługą sieciową. Spróbuj ponownie później."));
 			return;
 		}
 		const value = await res2.json();
 		if (!Array.isArray(value?._embedded?.labels)) {
+			setLabelDisabled(labelId, undefined);
 			setError(new Error('Incorrect response'));
 			return;
 		}
@@ -128,6 +139,7 @@ const LabelsPage: React.FC = () => {
 								<ListItemSecondaryAction>
 									<Tooltip title="Utwórz paczkę">
 										<IconButton
+											disabled={label.disabled}
 											edge="end"
 											aria-label="create"
 											onClick={() =>
