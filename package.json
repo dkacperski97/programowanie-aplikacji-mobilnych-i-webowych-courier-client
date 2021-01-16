@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@auth0/auth0-react": "^1.2.0",
     "@emotion/core": "^10.1.1",
     "@emotion/styled": "^10.0.27",
     "@material-ui/core": "^5.0.0-alpha.15",
